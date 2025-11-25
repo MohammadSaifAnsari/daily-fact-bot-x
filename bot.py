@@ -28,7 +28,7 @@ def get_gemini_content():
     print("✨ Asking Gemini for content...")
     try:
         genai.configure(api_key=GEMINI_KEY)
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
         
         prompt = (
             "Generate a fascinating, verified fact about nature, history, space, or science. "
@@ -147,3 +147,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
