@@ -1,0 +1,5 @@
+google-generativeai
+tweepy
+python-dotenv
+requests
+schedule
