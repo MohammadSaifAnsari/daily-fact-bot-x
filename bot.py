@@ -1,5 +1,5 @@
 import sys
-# 1. FIX: Force UTF-8 encoding for VS Code/Windows terminals
+# 1. FORCE UTF-8: Fixes the "UnicodeEncodeError" on Windows/VS Code
 sys.stdout.reconfigure(encoding='utf-8')
 
 import os
@@ -8,7 +8,8 @@ import tweepy
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# Load keys from .env file
+# 2. Load environment variables
+# (Works locally with .env file, and works on GitHub Actions using Secrets)
 load_dotenv()
 
 # --- CONFIGURATION ---
@@ -21,36 +22,41 @@ X_ACCESS_SECRET = os.getenv("X_ACCESS_SECRET")
 
 def get_gemini_content():
     """
-    Returns a tuple: (fact_text, keyword_for_image)
+    Asks Gemini for a Fact and a Keyword.
+    Returns: (fact_text, keyword)
     """
-    print("✨ Asking Gemini for a fact...")
-    genai.configure(api_key=GEMINI_KEY)
-    model = genai.GenerativeModel('gemini-2.5-flash')
-    
-    prompt = (
-        "Generate a fascinating, verified fact about nature, history, or science. "
-        "Then, provide a single, simple keyword to search for an image of that fact. "
-        "Format your response exactly like this: FACT ||| KEYWORD. "
-        "Keep the fact under 200 characters. No hashtags in the response."
-    )
-    
+    print("✨ Asking Gemini for content...")
     try:
+        genai.configure(api_key=GEMINI_KEY)
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        prompt = (
+            "Generate a fascinating, verified fact about nature, history, space, or science. "
+            "Then, provide a single, simple English keyword to search for an image of that fact. "
+            "Format your response exactly like this: FACT ||| KEYWORD. "
+            "Keep the fact under 200 characters. Do not include hashtags."
+        )
+        
         response = model.generate_content(prompt)
         text = response.text.strip()
+        
         if "|||" in text:
             fact, keyword = text.split("|||")
             return fact.strip(), keyword.strip()
         else:
-            return text, "nature" # Fallback
+            # Fallback if Gemini messes up the format
+            return text, "science"
+            
     except Exception as e:
         print(f"❌ Gemini Error: {e}")
         return None, None
 
 def get_image_from_unsplash(keyword):
     """
-    Searches Unsplash and downloads a random image.
+    Downloads a random image for the keyword.
+    Returns: path to the saved image file.
     """
-    print(f"📸 Searching Unsplash for: {keyword}...")
+    print(f"📸 Searching Unsplash for: '{keyword}'...")
     url = "https://api.unsplash.com/photos/random"
     params = {
         "query": keyword,
@@ -64,72 +70,80 @@ def get_image_from_unsplash(keyword):
             data = response.json()
             image_url = data['urls']['regular']
             
-            # Download the image
+            # Download binary content
             img_data = requests.get(image_url).content
-            with open('temp_image.jpg', 'wb') as handler:
+            filename = "temp_post_image.jpg"
+            
+            with open(filename, 'wb') as handler:
                 handler.write(img_data)
-            print("⬇️  Image downloaded.")
-            return 'temp_image.jpg'
+            
+            print("⬇️  Image downloaded successfully.")
+            return filename
         else:
-            print(f"❌ Unsplash Error: {response.status_code}")
+            print(f"❌ Unsplash API Error: {response.status_code}")
             return None
     except Exception as e:
         print(f"❌ Image Download Error: {e}")
         return None
 
-def run_test_post():
-    print("--- 🚀 Starting Test Run ---")
-    
-    # 1. Get Content
+def main():
+    print("--- 🤖 Daily Fact Bot Starting ---")
+
+    # Step 1: Get Text Content
     fact, keyword = get_gemini_content()
     if not fact:
-        print("Stopping: No content generated.")
+        print("Aborting: Failed to generate fact.")
         return
 
     print(f"📝 Fact: {fact}")
 
-    # 2. Get Image
+    # Step 2: Get Image
     image_path = get_image_from_unsplash(keyword)
     if not image_path:
-        print("Stopping: No image found.")
+        print("Aborting: Failed to download image.")
         return
 
-    # 3. Authenticate to X
-    print("🔐 Authenticating with X...")
+    # Step 3: Authenticate to X (Twitter)
     try:
-        # V1.1 Auth (For Media Upload)
+        print("🔐 Authenticating with X...")
+        
+        # v1.1 API (Required for Media Upload)
         auth = tweepy.OAuth1UserHandler(
             X_CONSUMER_KEY, X_CONSUMER_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET
         )
-        api = tweepy.API(auth)
+        api_v1 = tweepy.API(auth)
 
-        # V2 Auth (For Posting Text)
-        client = tweepy.Client(
+        # v2 Client (Required for Posting Tweet)
+        client_v2 = tweepy.Client(
             consumer_key=X_CONSUMER_KEY,
             consumer_secret=X_CONSUMER_SECRET,
             access_token=X_ACCESS_TOKEN,
             access_token_secret=X_ACCESS_SECRET
         )
 
-        # 4. Upload Image
-        print("📤 Uploading image to X...")
-        media = api.media_upload(filename=image_path)
+        # Step 4: Upload Media
+        print("outbox_tray Uploading media...")
+        media = api_v1.media_upload(filename=image_path)
         media_id = media.media_id
 
-        # 5. Post Tweet
+        # Step 5: Post Tweet
         print("🐦 Posting tweet...")
-        tweet_text = f"{fact}\n\n#{keyword.replace(' ', '')} #DailyFact #DidYouKnow"
-        
-        response = client.create_tweet(text=tweet_text, media_ids=[media_id])
-        print(f"✅ SUCCESS! Tweet ID: {response.data['id']}")
-        
-        # Cleanup
-        os.remove(image_path)
-        print("🧹 Cleaned up temporary files.")
-        
+        # Clean up keyword for hashtag (remove spaces)
+        clean_tag = keyword.replace(" ", "")
+        tweet_text = f"{fact}\n\n#{clean_tag} #DailyFact #Learning"
+
+        response = client_v2.create_tweet(text=tweet_text, media_ids=[media_id])
+        print(f"✅ SUCCESS! Tweet sent. ID: {response.data['id']}")
+
     except Exception as e:
-        print(f"❌ Twitter Post Error: {e}")
+        print(f"❌ Twitter Error: {e}")
+
+    finally:
+        # Step 6: Cleanup (Always run this)
+        if image_path and os.path.exists(image_path):
+            os.remove(image_path)
+            print("🧹 Temporary image file deleted.")
+        print("--- End of Script ---")
 
 if __name__ == "__main__":
-    # This runs the function immediately, once.
-    run_test_post()
+    main()
