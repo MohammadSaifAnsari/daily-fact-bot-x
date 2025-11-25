@@ -2,9 +2,13 @@ name: Daily Fact Bot
 
 on:
   schedule:
-    # Runs at 09:00, 14:00, and 20:00 UTC every day
-    # You may need to adjust these numbers for your Timezone
-    - cron: '0 9,14,20 * * *'
+    # CRON SYNTAX: 'minute hour day month day-of-week'
+    # Times are in UTC.
+    # 3:30 UTC  = 9:00 AM IST
+    # 8:30 UTC  = 2:00 PM IST
+    # 14:30 UTC = 8:00 PM IST
+    - cron: '30 3,8,14 * * *'
+  
   # Allows you to run it manually from the Actions tab for testing
   workflow_dispatch:
 
@@ -33,6 +37,4 @@ jobs:
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
-        # We use the 'test' function or modify bot.py to run once and exit
-        # ensure your bot.py calls the main function at the bottom!
         run: python bot.py
