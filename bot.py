@@ -143,11 +143,11 @@ def main():
         
         # 4. Hashtags (NO "AI" TAGS)
         # We use generic, high-traffic tags to look organic
-        tweet_text = f"{fact} 🦅\n\n#HawkFacts #History #Science #Mystery"
+        tweet_text = f"{fact} \n\n#HawkFacts #History #Science #Mystery"
         
         # Safety Truncation
         if len(tweet_text) > 280:
-             tweet_text = f"{fact} 🦅\n\n#HawkFacts"
+             tweet_text = f"{fact} \n\n#HawkFacts"
 
         response = client_v2.create_tweet(text=tweet_text, media_ids=[media.media_id])
         print(f"✅ SUCCESS! Tweet sent. ID: {response.data['id']}")
@@ -162,3 +162,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
