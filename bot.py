@@ -41,7 +41,7 @@ def get_gemini_content():
         "POSITIVE CONSTRAINTS (DO THIS):\n"
         "- Focus on the 'Twist' or 'Irony'.\n"
         "- Use Active Voice (e.g. 'The volcano destroyed...').\n"
-        "- STRICTLY under 200 characters.\n"
+        "- STRICTLY under 230 characters.\n"
         "NEGATIVE CONSTRAINTS (DO NOT DO THIS):\n"
         "- NO 'Did you know', 'Imagine', or 'Fun fact'.\n"
         "- NO Emojis in the text.\n"
@@ -143,11 +143,11 @@ def main():
         
         # 4. Hashtags (NO "AI" TAGS)
         # We use generic, high-traffic tags to look organic
-        tweet_text = f"{fact} \n\n#HawkFacts #History #Science #Mystery"
+        tweet_text = f"Did you know? {fact} \n\n#HawkFacts #History #Science #Mystery"
         
         # Safety Truncation
         if len(tweet_text) > 280:
-             tweet_text = f"{fact} \n\n#HawkFacts"
+             tweet_text = f"Did you know? {fact} \n\n#HawkFacts"
 
         response = client_v2.create_tweet(text=tweet_text, media_ids=[media.media_id])
         print(f"✅ SUCCESS! Tweet sent. ID: {response.data['id']}")
@@ -162,4 +162,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
