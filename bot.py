@@ -146,7 +146,7 @@ def main():
         tweet_text = f"Did you know? {fact} \n\n#HawkFacts #History #Science #Mystery"
         
         # Safety Truncation
-        if len(tweet_text) > 280:
+        if len(tweet_text) > 270:
              tweet_text = f"Did you know? {fact} \n\n#HawkFacts"
 
         response = client_v2.create_tweet(text=tweet_text, media_ids=[media.media_id])
@@ -162,5 +162,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
