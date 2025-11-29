@@ -1,15 +1,15 @@
 import sys
-# 1. FORCE UTF-8: Fixes Windows/VS Code emoji errors
+# 1. FORCE UTF-8
 sys.stdout.reconfigure(encoding='utf-8')
 
 import os
+import random 
 import requests
 import tweepy
 import google.generativeai as genai
 import urllib.parse
 from dotenv import load_dotenv
 
-# 2. Load environment variables
 load_dotenv()
 
 # --- CONFIGURATION ---
@@ -19,49 +19,88 @@ X_CONSUMER_SECRET = os.getenv("X_API_SECRET")
 X_ACCESS_TOKEN = os.getenv("X_ACCESS_TOKEN")
 X_ACCESS_SECRET = os.getenv("X_ACCESS_SECRET")
 
+# --- TOPIC LIST ---
+TOPICS = [
+    # --- NATURE & BIOLOGY ---
+    "The Deep Sea", "Bioluminescence", "Fungi & Mycology", "Carnivorous Plants", 
+    "Extremophiles", "Animal Camouflage", "Venomous Creatures", "Bird Migration", 
+    "The Amazon Rainforest", "Coral Reefs", "Ant Colonies", "Wolf Packs", 
+    "Whale Communication", "Insect Swarms", "Parasites", "Symbiosis",
+    "Ancient Trees", "Octopuses", "Crows & Ravens", "Jellyfish", 
+    
+    # --- SPACE & PHYSICS ---
+    "Black Holes", "Neutron Stars", "The Mars Rover", "The ISS", 
+    "Dark Matter", "Solar Flares", "Exoplanets", "Time Dilation", 
+    "Quantum Entanglement", "The Big Bang", "Supernovas", "Asteroids", 
+    "Saturn's Rings", "Voyager Probes", "Light Speed", "Gravity",
+    
+    # --- ANCIENT HISTORY ---
+    "Ancient Egypt", "The Maya Civilization", "The Aztecs", "The Incas", 
+    "Samurai Culture", "Spartan Warriors", "The Silk Road", "The Library of Alexandria", 
+    "Viking Lore", "Roman Gladiators", "Mesopotamia", "The Bronze Age Collapse", 
+    "Ancient Greek Inventions", "The Great Wall of China", "Stonehenge", "Petra",
+    
+    # --- WEIRD HISTORY & MYSTERY ---
+    "The Mary Celeste", "The Dancing Plague of 1518", "Jack the Ripper", 
+    "The Zodiac Killer", "The Bermuda Triangle", "Lost Cities", "Alchemy", 
+    "Victorian Era Poisons", "The Salem Witch Trials", "Espionage Gadgets", 
+    "Cryptids", "Unsolved Heists", "Ghost Ships", "Secret Societies",
+    
+    # --- SCIENCE & TECH ---
+    "Artificial Intelligence", "Nanotechnology", "Robotics", "Cybersecurity", 
+    "The Internet's History", "Video Game History", "Cryptography", "Nuclear Energy", 
+    "3D Printing", "Virtual Reality", "Space Elevators", "Biotech",
+    
+    # --- EARTH & GEOGRAPHY ---
+    "Volcanoes", "Tectonic Plates", "The Dead Sea", "Mount Everest", 
+    "Antarctica", "The Sahara Desert", "Caves & Spelunking", "Tsunamis", 
+    "Tornadoes", "The Aurora Borealis", "Glaciers", "Geysers",
+    
+    # --- CULTURE & ARTS ---
+    "Surrealism", "The Renaissance", "Film Noir", "Ancient Pottery", 
+    "Origami", "Calligraphy", "Gothic Architecture", "Steampunk", 
+    "Cyberpunk", "Mythology", "Urban Legends", "Coffee History"
+]
+
 def clean_text(text):
-    """Sanitizes text to remove bullets/dashes/quotes."""
-    text = text.replace("**", "")
+    """Sanitizes text: removes bolding (**), bullets, dashes, quotes."""
+    text = text.replace("**", "") 
     return text.strip().lstrip("-•*> \"'")
 
 def get_gemini_content():
-    """
-    Generates a Fact + Image Description using Positive/Negative Prompts.
-    """
+    """Generates a Simple, Interesting Fact."""
+    # 1. Pick a random topic
+    chosen_topic = random.choice(TOPICS)
+    print(f"✨ Topic Selected: {chosen_topic}")
     print("✨ Asking Gemini for content...")
+    
     genai.configure(api_key=GEMINI_KEY)
     model = genai.GenerativeModel('gemini-2.5-flash')
     
-    # --- THE MASTER PROMPT ---
+    # --- PROMPT ---
     full_prompt = (
-        "ACT AS: A historian and cinematic art director.\n"
-        "TASK: Create content for a 'Dark History & Weird Science' channel.\n\n"
+        f"ACT AS: A teacher of interesting trivia.\n"
+        f"TASK: Write one fascinating fact specifically about: {chosen_topic}.\n\n"
 
         "--- PART 1: THE FACT (Text) ---\n"
-        "Write one mind-blowing fact. \n"
-        "POSITIVE CONSTRAINTS (DO THIS):\n"
-        "- Focus on the 'Twist' or 'Irony'.\n"
-        "- Use Active Voice (e.g. 'The volcano destroyed...').\n"
-        "- STRICTLY under 230 characters.\n"
-        "NEGATIVE CONSTRAINTS (DO NOT DO THIS):\n"
-        "- NO 'Did you know', 'Imagine', or 'Fun fact'.\n"
-        "- NO Emojis in the text.\n"
-        "- NO Dashes (-) at the start.\n\n"
+        "POSITIVE CONSTRAINTS:\n"
+        "- Content: Simple, educational, and verified.\n"
+        "- Style: Clear and direct sentences.\n"
+        "- STRICTLY under 240 characters.\n"
+        "NEGATIVE CONSTRAINTS:\n"
+        "- NO 'Did you know' (I will add it later).\n"
+        "- NO Emojis.\n"
+        "- NO Dashes/Bullets.\n"
+        "- NO Markdown bolding (**).\n"
+        "- NO Horror, gore, or overly complex irony.\n\n"
 
         "--- PART 2: THE IMAGE PROMPT (Visual) ---\n"
-        "Write a detailed prompt for an AI image generator to draw this scene.\n"
-        "POSITIVE CONSTRAINTS:\n"
-        "- Describe the lighting, texture, and angle (e.g., 'Cinematic lighting, macro shot, 8k resolution').\n"
-        "- Make it look like a National Geographic photograph.\n"
-        "NEGATIVE CONSTRAINTS:\n"
-        "- NO text inside the image.\n"
-        "- NO cartoon styles.\n"
-        "- NO split screens.\n\n"
+        "Write a prompt for an AI image generator (Flux).\n"
+        "Constraint: Photorealistic, National Geographic style, Cinematic lighting, 8k.\n\n"
 
         "FORMAT: FACT ||| IMAGE_PROMPT"
     )
     
-    # Retry logic for length
     for attempt in range(3):
         try:
             response = model.generate_content(full_prompt)
@@ -86,17 +125,14 @@ def get_gemini_content():
     return None, None
 
 def generate_ai_image(prompt):
-    """
-    Generates an image using Pollinations (Flux Model).
-    """
+    """Generates image using Pollinations/Flux."""
     print(f"🎨 Generating Image: '{prompt}'...")
     
-    # Enhance prompt for realism
     final_prompt = f"{prompt}, hyper-realistic, cinematic lighting, 8k, highly detailed"
     encoded_prompt = urllib.parse.quote(final_prompt)
     
-    # Pollinations API URL (Flux Model)
-    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1280&height=720&model=flux&seed=42&nologo=true"
+    # Random seed ensures unique images
+    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1280&height=720&model=flux&seed={random.randint(1, 1000)}&nologo=true"
     
     try:
         response = requests.get(url, timeout=45)
@@ -107,7 +143,6 @@ def generate_ai_image(prompt):
             print("⬇️  Image downloaded.")
             return filename
         else:
-            print(f"❌ AI Error: {response.status_code}")
             return None
     except Exception as e:
         print(f"❌ Download Error: {e}")
@@ -142,13 +177,12 @@ def main():
 
         media = api_v1.media_upload(filename=image_path)
         
-        # 4. Hashtags (NO "AI" TAGS)
-        # We use generic, high-traffic tags to look organic
-        tweet_text = f"Did you know? {fact} \n\n#HawkFacts #History #Science #Mystery"
+        # 4. Construct Tweet (Emoji Removed)
+        tweet_text = f"Did you know? {fact}\n\n#HawkFacts #Facts #Learning"
         
-        # Safety Truncation
+        # Safety Truncation (Emoji Removed)
         if len(tweet_text) > 270:
-             tweet_text = f"Did you know? {fact} \n\n#HawkFacts"
+             tweet_text = f"Did you know? {fact}\n\n#HawkFacts"
 
         response = client_v2.create_tweet(text=tweet_text, media_ids=[media.media_id])
         print(f"✅ SUCCESS! Tweet sent. ID: {response.data['id']}")
@@ -163,7 +197,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
