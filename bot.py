@@ -21,6 +21,7 @@ X_ACCESS_SECRET = os.getenv("X_ACCESS_SECRET")
 
 def clean_text(text):
     """Sanitizes text to remove bullets/dashes/quotes."""
+    text = text.replace("**", "")
     return text.strip().lstrip("-•*> \"'")
 
 def get_gemini_content():
@@ -162,6 +163,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
