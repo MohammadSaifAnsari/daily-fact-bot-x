@@ -64,7 +64,8 @@ TOPICS = [
 
 def clean_text(text):
     """Sanitizes text: removes bolding (**), bullets, dashes, quotes."""
-    text = text.replace("**", "") 
+    text = text.replace("**", "")
+    text = text.replace('"', '').replace("'", "")
     return text.strip().lstrip("-•*> \"'")
 
 def get_gemini_content():
@@ -197,3 +198,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
