@@ -69,7 +69,7 @@ def clean_text(text):
     return text.strip().lstrip("-•*> \"'")
 
 def get_gemini_content():
-    """Generates a Simple, Interesting Fact."""
+    """Generates a Rare/Obscure Fact."""
     # 1. Pick a random topic
     chosen_topic = random.choice(TOPICS)
     print(f"✨ Topic Selected: {chosen_topic}")
@@ -80,8 +80,8 @@ def get_gemini_content():
     
     # --- PROMPT ---
     full_prompt = (
-        f"ACT AS: A teacher of interesting trivia.\n"
-        f"TASK: Write one fascinating fact specifically about: {chosen_topic}.\n\n"
+        f"ACT AS: A curator of rare, forgotten, and obscure knowledge.\n"
+        f"TASK: Write one 'Iceberg Tier 3' fact about: {chosen_topic}.\n\n"
 
         "--- PART 1: THE FACT (Text) ---\n"
         "POSITIVE CONSTRAINTS:\n"
@@ -101,6 +101,9 @@ def get_gemini_content():
 
         "FORMAT: FACT ||| IMAGE_PROMPT"
     )
+    generation_config = genai.types.GenerationConfig(
+        temperature=1.0 
+    )
     
     for attempt in range(3):
         try:
@@ -113,7 +116,7 @@ def get_gemini_content():
                 img_prompt = clean_text(img_prompt)
                 
                 # Length check
-                if len(fact) > 215:
+                if len(fact) > 235:
                     full_prompt += "\n\nSYSTEM: PREVIOUS FACT WAS TOO LONG. SHORTEN IT."
                     continue 
                 
@@ -198,4 +201,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
