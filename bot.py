@@ -87,7 +87,7 @@ def get_gemini_content():
         "POSITIVE CONSTRAINTS:\n"
         "- Content: Simple, educational, and verified.\n"
         "- Style: Clear and direct sentences.\n"
-        "- STRICTLY under 240 and more than 200 characters.\n"
+        "- STRICTLY under 240 and more than 190 characters.\n"
         "NEGATIVE CONSTRAINTS:\n"
         "- NO 'Did you know' (I will add it later).\n"
         "- NO Emojis.\n"
@@ -201,6 +201,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
