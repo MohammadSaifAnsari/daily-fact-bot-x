@@ -113,7 +113,7 @@ def get_gemini_content():
         "POSITIVE CONSTRAINTS:\n"
         "- Content: Simple, educational, and verified.\n"
         "- Style: Clear and direct sentences.\n"
-        "- STRICTLY under 240 and more than 190 characters.\n"
+        "- STRICTLY under 230 and more than 190 characters.\n"
         "NEGATIVE CONSTRAINTS:\n"
         "- NO 'Did you know' (I will add it later).\n"
         "- NO Emojis.\n"
@@ -131,7 +131,7 @@ def get_gemini_content():
         temperature=1.0 
     )
     
-    for attempt in range(3):
+    for attempt in range(7):
         try:
             response = model.generate_content(full_prompt)
             raw_text = response.text.strip()
@@ -142,7 +142,7 @@ def get_gemini_content():
                 img_prompt = clean_text(img_prompt)
                 
                 # Length check
-                if len(fact) > 235:
+                if len(fact) > 225:
                     full_prompt += "\n\nSYSTEM: PREVIOUS FACT WAS TOO LONG. SHORTEN IT."
                     continue 
                 
@@ -227,6 +227,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
