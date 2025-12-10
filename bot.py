@@ -21,45 +21,71 @@ X_ACCESS_SECRET = os.getenv("X_ACCESS_SECRET")
 
 # --- TOPIC LIST ---
 TOPICS = [
-    # --- NATURE & BIOLOGY ---
-    "The Deep Sea", "Bioluminescence", "Fungi & Mycology", "Carnivorous Plants", 
-    "Extremophiles", "Animal Camouflage", "Venomous Creatures", "Bird Migration", 
-    "The Amazon Rainforest", "Coral Reefs", "Ant Colonies", "Wolf Packs", 
-    "Whale Communication", "Insect Swarms", "Parasites", "Symbiosis",
-    "Ancient Trees", "Octopuses", "Crows & Ravens", "Jellyfish", 
-    
-    # --- SPACE & PHYSICS ---
-    "Black Holes", "Neutron Stars", "The Mars Rover", "The ISS", 
-    "Dark Matter", "Solar Flares", "Exoplanets", "Time Dilation", 
-    "Quantum Entanglement", "The Big Bang", "Supernovas", "Asteroids", 
-    "Saturn's Rings", "Voyager Probes", "Light Speed", "Gravity",
-    
-    # --- ANCIENT HISTORY ---
-    "Ancient Egypt", "The Maya Civilization", "The Aztecs", "The Incas", 
-    "Samurai Culture", "Spartan Warriors", "The Silk Road", "The Library of Alexandria", 
-    "Viking Lore", "Roman Gladiators", "Mesopotamia", "The Bronze Age Collapse", 
-    "Ancient Greek Inventions", "The Great Wall of China", "Stonehenge", "Petra",
-    
-    # --- WEIRD HISTORY & MYSTERY ---
-    "The Mary Celeste", "The Dancing Plague of 1518", "Jack the Ripper", 
-    "The Zodiac Killer", "The Bermuda Triangle", "Lost Cities", "Alchemy", 
-    "Victorian Era Poisons", "The Salem Witch Trials", "Espionage Gadgets", 
-    "Cryptids", "Unsolved Heists", "Ghost Ships", "Secret Societies",
-    
-    # --- SCIENCE & TECH ---
-    "Artificial Intelligence", "Nanotechnology", "Robotics", "Cybersecurity", 
-    "The Internet's History", "Video Game History", "Cryptography", "Nuclear Energy", 
-    "3D Printing", "Virtual Reality", "Space Elevators", "Biotech",
-    
-    # --- EARTH & GEOGRAPHY ---
-    "Volcanoes", "Tectonic Plates", "The Dead Sea", "Mount Everest", 
-    "Antarctica", "The Sahara Desert", "Caves & Spelunking", "Tsunamis", 
-    "Tornadoes", "The Aurora Borealis", "Glaciers", "Geysers",
-    
-    # --- CULTURE & ARTS ---
-    "Surrealism", "The Renaissance", "Film Noir", "Ancient Pottery", 
-    "Origami", "Calligraphy", "Gothic Architecture", "Steampunk", 
-    "Cyberpunk", "Mythology", "Urban Legends", "Coffee History"
+    # --- 🌌 DEEP SPACE & COSMIC HORROR ---
+    "Black Holes", "Neutron Stars", "The Fermi Paradox", "Dark Matter", "The Great Attractor", 
+    "Spaghettification", "Rogue Planets", "Gamma-Ray Bursts", "The Boötes Void", "Magnetars", 
+    "Time Dilation", "The Heat Death of the Universe", "Exoplanets", "Solar Flares", "White Dwarfs", 
+    "The Event Horizon", "Cosmic Microwave Background", "Pulsars", "Quasars", "The Oort Cloud", 
+    "Space Junk", "The ISS", "Voyager Probes", "Mars Colonization", "Europa (Moon)", "Titan (Moon)", 
+    "Io (Moon)", "Enceladus", "The Kuiper Belt", "Asteroid Impacts", "Supernovas", "Hypernovas", 
+    "Antimatter", "Wormholes", "Parallel Universes", "The Multiverse Theory", "String Theory",
+
+    # --- 🐙 WEIRD NATURE & BIOLOGY ---
+    "The Deep Sea", "Bioluminescence", "Cordyceps Fungi", "Tardigrades", "Axolotls", 
+    "The Platypus", "Mimic Octopuses", "Immortal Jellyfish", "Goblin Sharks", "Anglerfish", 
+    "Carnivorous Plants", "Slime Molds", "Parasitic Wasps", "Ant Supercolonies", "Bee Hive Intelligence", 
+    "Crow Intelligence", "Whale Songs", "Elephant Memory", "Wolf Pack Dynamics", "Bird Migration", 
+    "The Amazon Rainforest", "Coral Reefs", "Mangrove Forests", "Extremophiles", "Hydrothermal Vents", 
+    "The Galapagos Islands", "Komodo Dragons", "Poison Dart Frogs", "Electric Eels", "Vampire Bats", 
+    "Naked Mole Rats", "Pangolins", "Narwhals", "Giant Squids", "Colossal Squids", "Sperm Whales",
+
+    # --- 🏛️ ANCIENT CIVILIZATIONS & RUINS ---
+    "Ancient Egypt", "The Pyramids of Giza", "The Sphinx", "Valley of the Kings", "Tutankhamun", 
+    "The Maya Civilization", "Chichen Itza", "The Aztecs", "Tenochtitlan", "Human Sacrifice Rituals", 
+    "The Incas", "Machu Picchu", "The Olmecs", "Mesopotamia", "Sumerian Mythology", "Babylon", 
+    "The Hanging Gardens", "Ancient Rome", "The Colosseum", "Pompeii", "Herculaneum", "Roman Gladiators", 
+    "Spartan Warriors", "Ancient Greece", "The Parthenon", "The Oracle of Delphi", "Alexander the Great", 
+    "The Library of Alexandria", "The Bronze Age Collapse", "The Sea Peoples", "Göbekli Tepe", "Petra", 
+    "The Terracotta Army", "The Great Wall of China", "The Silk Road", "Samurai Culture", "Feudal Japan", 
+    "Viking Lore", "Norse Mythology", "Runestones", "Celtic Druids", "Easter Island (Moai)",
+
+    # --- ⚔️ DARK HISTORY & WAR ---
+    "The Black Death", "The Spanish Flu", "The Dancing Plague of 1518", "The Great Fire of London", 
+    "Jack the Ripper", "The Zodiac Killer", "The Mary Celeste", "The Titanic", "The Lusitania", 
+    "The Hindenburg Disaster", "Chernobyl", "Fukushima", "The Cold War", "The Cuban Missile Crisis", 
+    "The Berlin Wall", "Espionage Gadgets", "MK-Ultra", "Project Blue Book", "Area 51", "The Manhattan Project", 
+    "Trench Warfare (WWI)", "The Christmas Truce", "The Red Baron", "Kamikaze Pilots", "The Enigma Machine", 
+    "Alan Turing", "The French Revolution", "The Guillotine", "Marie Antoinette", "Napoleon Bonaparte", 
+    "The Battle of Waterloo", "The American Civil War", "Abraham Lincoln", "The Salem Witch Trials", 
+    "The Spanish Inquisition", "Pirates of the Caribbean", "Blackbeard", "Anne Bonny", "Torture Devices",
+
+    # --- 🏔️ EXTREME GEOGRAPHY ---
+    "Mount Everest", "The Mariana Trench", "The Dead Sea", "The Sahara Desert", "Antarctica", 
+    "The Arctic Circle", "Glaciers", "Icebergs", "Volcanoes", "Supervolcanoes", "Yellowstone", 
+    "Pompeii", "Krakatoa", "Tsunamis", "Earthquakes", "Tectonic Plates", "The Ring of Fire", 
+    "Geysers", "Caves", "Stalactites", "Blue Holes", "Cenotes", "The Amazon River", "The Nile River", 
+    "The Grand Canyon", "Uluru", "The Aurora Borealis", "The Bermuda Triangle", "Quick sand",
+
+    # --- 🧪 WEIRD SCIENCE & PHYSICS ---
+    "Quantum Mechanics", "Schrödinger's Cat", "The Double Slit Experiment", "Heisenberg Uncertainty Principle", 
+    "Nuclear Fission", "Nuclear Fusion", "Radioactivity", "Marie Curie", "Nikola Tesla", "Thomas Edison", 
+    "Isaac Newton", "Albert Einstein", "Darwin's Evolution", "DNA Structure", "CRISPR", "Cloning", 
+    "Artificial Intelligence", "Robotics", "Nanotechnology", "Cybernetics", "Biohacking", "Cryonics", 
+    "Perpetual Motion Machines", "Alchemy", "The Philosopher's Stone", "Steampunk Inventions", 
+    "Leonardo da Vinci", "The Golden Ratio", "Fractals", "Chaos Theory", "The Butterfly Effect",
+
+    # --- 🎭 OBSCURE CULTURE & MYTH ---
+    "Urban Legends", "Bigfoot", "The Loch Ness Monster", "Skinwalkers", "Wendigos", "Chupacabras", 
+    "The Mothman", "UFO Sightings", "Crop Circles", "Secret Societies", "The Illuminati", "The Freemasons", 
+    "Skull and Bones", "Knights Templar", "The Holy Grail", "King Arthur", "Excalibur", "Greek Mythology", 
+    "Roman Mythology", "Egyptian Mythology", "Norse Gods", "Yokai (Japanese Spirits)", "Djinn", 
+    "Vampire Folklore", "Werewolf Folklore", "Zombie Origins", "Voodoo", "Tarot Cards", "Ouija Boards",
+
+    # --- 🍎 EVERYDAY OBJECTS (HIDDEN HISTORIES) ---
+    "The History of Coffee", "Tea Ceremonies", "Chocolate Origins", "The invention of Silk", 
+    "The Printing Press", "The Telephone", "The Lightbulb", "The Internet", "Video Games", 
+    "The History of Zero", "Money and Currency", "Gold Rushes", "Diamond Mining", "The Spice Trade", 
+    "Glassblowing", "Blacksmithing", "Clockmaking", "Navigation Tools", "Maps and Cartography"
 ]
 
 def clean_text(text):
@@ -97,7 +123,7 @@ def get_gemini_content():
 
         "--- PART 2: THE IMAGE PROMPT (Visual) ---\n"
         "Write a prompt for an AI image generator (Flux).\n"
-        "Constraint: Photorealistic, National Geographic style, Cinematic lighting, 8k.\n\n"
+        "Constraint: Photorealistic, award-winning wildlife photography style, no text, Cinematic lighting, 8k.\n\n"
 
         "FORMAT: FACT ||| IMAGE_PROMPT"
     )
@@ -201,6 +227,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
