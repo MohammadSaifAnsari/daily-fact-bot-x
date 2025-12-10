@@ -2,12 +2,10 @@ name: Daily Fact Bot
 
 on:
   schedule:
-    # CRON SYNTAX: 'minute hour day month day-of-week'
-    # Times are in UTC.
-    # 3:30 UTC  = 9:00 AM IST
-    # 8:30 UTC  = 2:00 PM IST
-    # 14:30 UTC = 8:00 PM IST
-    - cron: '30 3,8,14 * * *'
+    # Runs 7 times a day at these UTC hours:
+    # 02:00, 05:00, 08:00, 11:00, 14:00, 17:00, 20:00 UTC
+    # (In India/IST, this is: 7:30 AM, 10:30 AM, 1:30 PM, 4:30 PM, 7:30 PM, 10:30 PM, 1:30 AM)
+    - cron: '0 2,5,8,11,14,17,20 * * *'
   
   # Allows you to run it manually from the Actions tab for testing
   workflow_dispatch:
