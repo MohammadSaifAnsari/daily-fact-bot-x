@@ -9,7 +9,7 @@ on:
   
   # Allows you to run it manually from the Actions tab for testing
   workflow_dispatch:
-
+ 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
