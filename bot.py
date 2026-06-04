@@ -10,6 +10,7 @@ import google.generativeai as genai
 import urllib.parse
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 # --- CONFIGURATION ---
